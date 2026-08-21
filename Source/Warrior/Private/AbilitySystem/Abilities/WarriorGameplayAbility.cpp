@@ -5,6 +5,7 @@
 #include "AbilitySystem/WarriorAbilitySystemComponent.h"
 #include "Components/Combat/PawnCombatComponent.h"
 #include "AbilitySystemBlueprintLibrary.h"
+#include "WarriorFunctionLibrary.h"
 
 void UWarriorGameplayAbility::OnGiveAbility(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec)
 {
@@ -34,7 +35,7 @@ void UWarriorGameplayAbility::EndAbility(const FGameplayAbilitySpecHandle Handle
 
 UPawnCombatComponent* UWarriorGameplayAbility::GetPawnCombatComponentFromActorInfo() const
 {
-    return GetAvatarActorFromActorInfo()->FindComponentByClass<UPawnCombatComponent>();
+    return UWarriorFunctionLibrary::NativeGetPawnCombatComponentFromActor(GetAvatarActorFromActorInfo());
 }
 
 UWarriorAbilitySystemComponent* UWarriorGameplayAbility::GetWarriorAbilitySystemComponentFromActorInfo() const

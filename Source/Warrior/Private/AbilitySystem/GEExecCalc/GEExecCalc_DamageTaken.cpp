@@ -9,11 +9,13 @@ struct FWarriorDamageCapture
 {
     DECLARE_ATTRIBUTE_CAPTUREDEF(AttackPower)
     DECLARE_ATTRIBUTE_CAPTUREDEF(DefensePower)
+    DECLARE_ATTRIBUTE_CAPTUREDEF(DamageTaken)
 
     FWarriorDamageCapture()
     {
         DEFINE_ATTRIBUTE_CAPTUREDEF(UWarriorAttributeSet, AttackPower, Source, false)
         DEFINE_ATTRIBUTE_CAPTUREDEF(UWarriorAttributeSet, DefensePower, Target, false)
+        DEFINE_ATTRIBUTE_CAPTUREDEF(UWarriorAttributeSet, DamageTaken, Target, false)
     }
 };
 
@@ -27,6 +29,7 @@ UGEExecCalc_DamageTaken::UGEExecCalc_DamageTaken()
 {
     RelevantAttributesToCapture.Add(GetWarriorDamageCapture().AttackPowerDef);
     RelevantAttributesToCapture.Add(GetWarriorDamageCapture().DefensePowerDef);
+    RelevantAttributesToCapture.Add(GetWarriorDamageCapture().DamageTakenDef);
 }
 
 void UGEExecCalc_DamageTaken::Execute_Implementation(const FGameplayEffectCustomExecutionParameters& ExecutionParams, FGameplayEffectCustomExecutionOutput& OutExecutionOutput) const
@@ -65,5 +68,30 @@ void UGEExecCalc_DamageTaken::Execute_Implementation(const FGameplayEffectCustom
     float TargetDefensePower = 0.f;
     ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(GetWarriorDamageCapture().DefensePowerDef, EvaluateParameters, TargetDefensePower);
 
-    if (UsedLightAttackComboCount)
+    if (UsedLightAttackComboCount != 0)
+    {
+        const float DamageIncreasePercentLight = (UsedLightAttackComboCount - 1) * 0.05f + 1.f;
+        
+        BaseDamage *= DamageIncreasePercentLight;
+    }
+
+    if (UsedHeavyAttackComboCount != 0)
+    {
+        const float DamageIncreasePercentHeavy = UsedHeavyAttackComboCount * 0.15f + 1.f;
+
+        BaseDamage *= DamageIncreasePercentHeavy;
+    }
+
+    const float FinalDamageDone = BaseDamage * SourceAttackPower / TargetDefensePower;
+
+    if (FinalDamageDone > 0.f)
+    {
+        OutExecutionOutput.AddOutputModifier(
+            FGameplayModifierEvaluatedData(
+                GetWarriorDamageCapture().DamageTakenProperty,
+                EGameplayModOp::Override,
+                FinalDamageDone
+            )
+        );
+    }
 }
