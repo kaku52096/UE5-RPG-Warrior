@@ -13,6 +13,7 @@
 #include "DataAssets/StartUpData/DataAsset_HeroStartUpData.h"
 #include "Components/Combat/HeroCombatComponent.h"
 #include "GameplayTagContainer.h"
+#include "Components/UI/HeroUIComponent.h"
 
 AWarriorHeroCharacter::AWarriorHeroCharacter()
 {
@@ -38,11 +39,18 @@ AWarriorHeroCharacter::AWarriorHeroCharacter()
     GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 
     HeroCombatComponent = CreateDefaultSubobject<UHeroCombatComponent>(TEXT("HeroCombatComponent"));
+
+    HeroUIComponent = CreateDefaultSubobject<UHeroUIComponent>(TEXT("HeroUIComponent"));
 }
 
 UPawnCombatComponent* AWarriorHeroCharacter::GetPawnCombatComponent() const
 {
     return HeroCombatComponent;
+}
+
+UPawnUIComponent* AWarriorHeroCharacter::GetPawnUIComponent() const
+{
+    return HeroUIComponent;
 }
 
 void AWarriorHeroCharacter::PossessedBy(AController* NewController)

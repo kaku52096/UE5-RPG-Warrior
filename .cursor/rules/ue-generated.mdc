@@ -1,0 +1,22 @@
+---
+description: Ignore Unreal Engine generated folders; work in Source, Config, Plugins, Content
+alwaysApply: true
+---
+
+# Unreal Engine workspace scope
+
+This is an Unreal Engine project. Agent work belongs in:
+
+- `Source/` — C++ game code
+- `Config/` — project ini
+- `Plugins/` — plugin source (if present)
+- `Content/` — assets, except generated partitions listed below
+- `*.uproject`
+
+Do not search, read, or edit generated output:
+
+- `Binaries/`, `Intermediate/`, `Saved/`, `DerivedDataCache/`, `Build/`
+- `.vs/`, `*.sln`, `*.vcxproj*`
+- `Content/__ExternalActors__/`, `Content/__ExternalObjects__/`
+
+If a build artifact is needed, regenerate it with UnrealBuildTool / the Editor rather than hand-editing generated files.

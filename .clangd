@@ -1,0 +1,9 @@
+# Match UBT's clang-cl (VS 2022 LLVM 19). Standalone clangd 22
+# disagrees with MSVC intrinsic headers (_m_prefetch).
+CompileFlags:
+  CompilationDatabase: .
+
+Diagnostics:
+  UnusedIncludes: None
+  Suppress:
+    - builtin_definition

@@ -8,6 +8,18 @@
 # Do not ignore current project's `.uproject`.
 !/*.uproject
 
+# Cursor / VS Code tasks and clangd project config.
+!/.vscode/
+!/.vscode/tasks.json
+!/.clangd
+!/.cursor/
+!/.cursor/rules/
+!/.cursor/rules/**
+!/.cursor/skills/
+!/.cursor/skills/**
+!/.cursor/commands/
+!/.cursor/commands/**
+
 # Do not ignore source, config and plugins dirs.
 !/Source/**
 !/Config/**

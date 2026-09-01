@@ -1,0 +1,39 @@
+{
+	"version": "2.0.0",
+	"options": {
+		"cwd": "${workspaceFolder}"
+	},
+	"tasks": [
+		{
+			"label": "UE: Build WarriorEditor (Development Win64)",
+			"type": "shell",
+			"command": "D:/Applications/UE_5.7/Engine/Build/BatchFiles/Build.bat",
+			"args": [
+				"WarriorEditor",
+				"Win64",
+				"Development",
+				"-Project=${workspaceFolder}/Warrior.uproject",
+				"-WaitMutex"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"problemMatcher": "$msCompile"
+		},
+		{
+			"label": "UE: Generate Clang Database",
+			"type": "shell",
+			"command": "D:/Applications/UE_5.7/Engine/Binaries/DotNET/UnrealBuildTool/UnrealBuildTool.exe",
+			"args": [
+				"-mode=GenerateClangDatabase",
+				"-project=${workspaceFolder}/Warrior.uproject",
+				"WarriorEditor",
+				"Win64",
+				"Development",
+				"-OutputDir=${workspaceFolder}"
+			],
+			"problemMatcher": []
+		}
+	]
+}
