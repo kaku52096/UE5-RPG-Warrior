@@ -5,9 +5,9 @@
 #include "CoreMinimal.h"
 #include "AttributeSet.h"
 #include "WarriorAbilitySystemComponent.h"
-#include "UObject/WeakInterfacePtr.h"
-#include "Interfaces/PawnUIInterface.h"
 #include "WarriorAttributeSet.generated.h"
+
+class IPawnUIInterface;
 
 #define ATTRIBUTE_ACCESSORS(ClassName, PropertyName) \
 GAMEPLAYATTRIBUTE_PROPERTY_GETTER(ClassName, PropertyName) \

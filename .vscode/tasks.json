@@ -15,10 +15,6 @@
 				"-Project=${workspaceFolder}/Warrior.uproject",
 				"-WaitMutex"
 			],
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			},
 			"problemMatcher": "$msCompile"
 		},
 		{
@@ -33,6 +29,22 @@
 				"Development",
 				"-OutputDir=${workspaceFolder}"
 			],
+			"problemMatcher": [],
+			"runOptions": {
+				"runOn": "folderOpen"
+			}
+		},
+		{
+			"label": "UE: Build and Refresh Clangd",
+			"dependsOrder": "sequence",
+			"dependsOn": [
+				"UE: Build WarriorEditor (Development Win64)",
+				"UE: Generate Clang Database"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
 			"problemMatcher": []
 		}
 	]

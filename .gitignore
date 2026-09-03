@@ -19,6 +19,9 @@
 !/.cursor/skills/**
 !/.cursor/commands/
 !/.cursor/commands/**
+!/.cursor/hooks.json
+!/.cursor/hooks/
+!/.cursor/hooks/**
 
 # Do not ignore source, config and plugins dirs.
 !/Source/**

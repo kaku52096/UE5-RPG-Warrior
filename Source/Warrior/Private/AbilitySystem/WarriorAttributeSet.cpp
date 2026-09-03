@@ -6,6 +6,8 @@
 #include "WarriorFunctionLibrary.h"
 #include "WarriorGameplayTags.h"
 #include "Components/UI/PawnUIComponent.h"
+#include "Components/UI/HeroUIComponent.h"
+#include "Interfaces/PawnUIInterface.h"
 
 #include "WarriorDebugHelper.h"
 
@@ -45,7 +47,12 @@ void UWarriorAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCal
     {
         const float NewCurrentRage = FMath::Clamp(GetCurrentRage(), 0.f, GetMaxRage());
 
-        SetCurrentHealth(NewCurrentRage);
+        SetCurrentRage(NewCurrentRage);
+        
+        if (UHeroUIComponent* HeroUIComponent = CachedPawnUIInterface->GetHeroUIComponent())
+        {
+            HeroUIComponent->OnCurrentRageChanged.Broadcast(GetCurrentRage() / GetMaxRage());
+        } 
     }
 
     if (Data.EvaluatedData.Attribute == GetDamageTakenAttribute())
@@ -65,10 +72,11 @@ void UWarriorAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCal
 
         Debug::Print(DebugMsg, FColor::Green);
 
+        // Notify UI
         PawnUIComponent->OnCurrentHealthChanged.Broadcast(GetCurrentHealth() / GetMaxHealth());
-
+        
         // Handle Character Death
-        if (NewCurrentHealth == 0.f)
+        if (GetCurrentHealth() == 0.f)
         {
             UWarriorFunctionLibrary::AddGameplayTagToActorIfNone(Data.Target.GetAvatarActor(), WarriorGameplayTags::Shared_Status_Dead);
             

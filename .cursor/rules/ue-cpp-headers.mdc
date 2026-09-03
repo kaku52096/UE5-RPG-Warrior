@@ -1,0 +1,28 @@
+---
+description: Prefer forward declarations in headers; include full types in cpp
+globs: Source/**/*.h, Source/**/*.cpp
+alwaysApply: false
+---
+
+# Header includes vs forward declares
+
+In `.h`, forward-declare types that appear only as pointers, references, or `TObjectPtr`. Include the full header in the `.cpp` that calls members or needs a complete type.
+
+```cpp
+// ✅ header
+class UPawnUIComponent;
+UPawnUIComponent* GetPawnUIComponent() const;
+
+// ✅ cpp
+#include "Components/UI/PawnUIComponent.h"
+```
+
+```cpp
+// ❌ header — pulls Foo.h into every dependent TU
+#include "Foo.h"
+class UBar { Foo* Foo; };
+```
+
+Must include in the header when the type is a base class, a by-value member, or a template argument that needs a complete type (e.g. `TWeakInterfacePtr<IPawnUIInterface>`).
+
+Do not include a UCLASS header in a public `.h` only to mention a pointer. Extra includes in Public headers inflate incremental compile cost and cause include cycles with `*.generated.h`.

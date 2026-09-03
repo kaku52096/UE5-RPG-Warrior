@@ -9,7 +9,9 @@ Regenerate this project's Clang compilation database, then restart clangd so Alt
 
 ## When to run
 
-Only when the user asks, or after **new/deleted** `.cpp`/`.h`, **Build.cs / Target.cs / uproject plugin** changes, or engine upgrade. Do not regenerate for ordinary edits to existing source.
+Agent edits to `Source/**/*.h` / `.cpp` are also refreshed by `.cursor/hooks.json` (`afterFileEdit`). Ctrl+Shift+B runs generate after a Cursor build. Opening the folder runs generate once.
+
+When the user explicitly asks, still follow the steps below.
 
 ## Steps
 
