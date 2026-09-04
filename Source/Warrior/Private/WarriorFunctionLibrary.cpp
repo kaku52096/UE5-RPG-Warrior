@@ -65,5 +65,3 @@ UPawnCombatComponent* UWarriorFunctionLibrary::BP_GetPawnCombatComponentFromActo
 
     return CombatComponent;
 }
-
-
