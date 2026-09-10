@@ -4,6 +4,7 @@
 #include "AnimInstances/WarriorCharacterAnimInstance.h"
 #include "Characters/WarriorBaseCharacter.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "KismetAnimationLibrary.h"
 
 void UWarriorCharacterAnimInstance::NativeInitializeAnimation()
 {
@@ -17,17 +18,19 @@ void UWarriorCharacterAnimInstance::NativeInitializeAnimation()
 
 void UWarriorCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
+    
+}
+
+void UWarriorCharacterAnimInstance::NativeThreadSafeUpdateAnimation(float DeltaSeconds)
+{
     if (!OwningCharacter || !OwningMovementComponent)
     {
         return;
     }
 
-    CharacterVelocity = OwningCharacter->GetVelocity();
-    CharacterAcceleration = OwningMovementComponent->GetCurrentAcceleration();
-}
+    GroundSpeed = OwningCharacter->GetVelocity().Size2D();
 
-void UWarriorCharacterAnimInstance::NativeThreadSafeUpdateAnimation(float DeltaSeconds)
-{
-    GroundSpeed = CharacterVelocity.Size2D();
-    bHasAcceleration = CharacterAcceleration.SizeSquared2D() > 0.f;
+    bHasAcceleration = OwningMovementComponent->GetCurrentAcceleration().SizeSquared2D() > 0.f;
+
+    LocomotionDirection = UKismetAnimationLibrary::CalculateDirection(OwningCharacter->GetVelocity(), OwningCharacter->GetActorRotation());
 }
