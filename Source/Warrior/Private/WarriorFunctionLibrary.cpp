@@ -6,6 +6,8 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "Interfaces/PawnCombatInterface.h"
 #include "GenericTeamAgentInterface.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "WarriorGameplayTags.h"
 
 UWarriorAbilitySystemComponent* UWarriorFunctionLibrary::NativeGetWarriorASCFromActor(AActor* InActor)
 {
@@ -80,4 +82,50 @@ bool UWarriorFunctionLibrary::IsTargetPawnHostile(APawn* QueryPawn, APawn* Targe
     }
 
     return false;
+}
+
+FGameplayTag UWarriorFunctionLibrary::ComputeHitReactDirection(AActor* InAttacker, AActor* InVictim, float& OutAngleDifference)
+{
+    check(InAttacker && InVictim);
+
+    const FVector VictimForward = InVictim->GetActorForwardVector();
+    const FVector VictimToAttackerNormalized = (InAttacker->GetActorLocation() - InVictim->GetActorLocation()).GetSafeNormal();
+
+    const float DotResult = FVector::DotProduct(VictimForward, VictimToAttackerNormalized);
+    OutAngleDifference = UKismetMathLibrary::DegAcos(DotResult);
+
+    const FVector CrossResult = FVector::CrossProduct(VictimForward, VictimToAttackerNormalized);
+
+    if (CrossResult.Z < 0.f)
+    {
+        OutAngleDifference *= -1.f;
+    }
+
+    if (OutAngleDifference >= -45.f && OutAngleDifference <= 45.f)
+    {
+        return WarriorGameplayTags::Shared_Status_HitReact_Front;
+    }
+    else if (OutAngleDifference < -45.f && OutAngleDifference >= -135.f)
+    {
+        return WarriorGameplayTags::Shared_Status_HitReact_Left;
+    }
+    else if (OutAngleDifference < -135.f || OutAngleDifference > 135.f)
+    {
+        return WarriorGameplayTags::Shared_Status_HitReact_Back;
+    }
+    else if (OutAngleDifference > 45.f && OutAngleDifference <= 135.f)
+    {
+        return WarriorGameplayTags::Shared_Status_HitReact_Right;
+    }
+
+    return WarriorGameplayTags::Shared_Status_HitReact_Front;
+}
+
+bool UWarriorFunctionLibrary::IsValidBlock(AActor* InAttacker, AActor* InDefender)
+{
+    check(InAttacker && InDefender);
+
+    const float DotResult = FVector::DotProduct(InAttacker->GetActorForwardVector(), InDefender->GetActorForwardVector());
+
+    return DotResult < -0.1f;
 }
