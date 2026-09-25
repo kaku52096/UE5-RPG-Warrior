@@ -1,6 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 using UnrealBuildTool;
+using UnrealBuildTool.Rules;
 
 public class Warrior : ModuleRules
 {
@@ -17,7 +18,9 @@ public class Warrior : ModuleRules
             "GameplayTags",
             "GameplayTasks",
             "AnimGraphRuntime",
-			"MotionWarping"
+			"MotionWarping",
+			"Niagara",
+            "NavigationSystem"
         });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
